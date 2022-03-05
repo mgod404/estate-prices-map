@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from .models import Offer, LocationData
-from api.otodomscraper.googlemapsgeocoding import geocode_single_location
+from .googlemapsgeocoding import geocode_single_location
 from datetime import date
 import concurrent.futures 
 import json
