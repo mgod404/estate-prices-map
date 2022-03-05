@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <title>Otodom Scraper</title>
+  </head>
+  <body>
+    <div id="map"></div>
+      <nav id="menu" class="container navbar navbar-light bg-light d-flex flex-column card">
+          <div class="d-flex flex-row input-wrapper">
+            <input class="form-control mr-sm-2" type="search" id="cityNameSearch" placeholder="City Name" aria-label="Search">
+            <input type="button" class="btn btn-outline-success my-2 my-sm-0" onclick="showOffers('cityNameSearch')" id="searchBttn" value="Search"/>   
+          </div>
+          <div class="text-danger" id="displayError"></div>
+      </nav>
+    <script src="{% static 'app.js' %}"></script>
+    
+  </body>
+</html>

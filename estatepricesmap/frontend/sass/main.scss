@@ -1,0 +1,22 @@
+#map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+#menu {
+    margin-top:8px;
+    width:fit-content;
+}
+
+.input-wrapper{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:1rem;
+}
+
+//Customise bootstrap here
+$primary: indigo;
+//***********
+@import '../node_modules/bootstrap/scss/bootstrap';
