@@ -21,7 +21,7 @@ def post_data(city, results):
     payload = {"key" : '1234','city': city, 'data' : results}
     data = json.dumps(payload)
     print(f"http://{os.environ.get('BACKEND_URL')}/api/")
-    r = post(f"http://127.0.0.1:8000/api/", json=data)
+    r = post(f"http://{os.environ.get('BACKEND_URL')}/api/", json=data)
     print(str(r.status_code))
 
 
@@ -41,7 +41,9 @@ if __name__ == "__main__":
         'wroclaw' : "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/wroclaw?limit=100&page="
     }
 
-    schedule.every().day.at("02:00").do(get_new_offers(CITIES_URL))
+    schedule.every().day.at("12:22").do(get_new_offers(CITIES_URL))
+    time.sleep(10)
+
 
     while True:
         if not check_if_scraper_works:

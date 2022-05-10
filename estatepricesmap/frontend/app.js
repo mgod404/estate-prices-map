@@ -1,5 +1,6 @@
 import {GoogleMapsOverlay as DeckOverlay} from '@deck.gl/google-maps';
 import {ColumnLayer} from '@deck.gl/layers';
+import {HexagonLayer} from '@deck.gl/aggregation-layers';
 import {mean, quantileSeq, min, max} from 'mathjs';
 
 require('file-loader?name=[name].[ext]!./index.html');
@@ -33,8 +34,8 @@ function loadMap(response){
   };
   let latArray = responseParsed.map(element => element.lat);
   let lngArray = responseParsed.map(element => element.lng);
-  let centerLat = mean(min(latArray), max(latArray));
-  let centerLng = mean(min(lngArray), max(lngArray));
+  let centerLat = quantileSeq(latArray, 0.5);
+  let centerLng = quantileSeq(lngArray, 0.5);
 
   loadScript(GOOGLE_MAPS_API_URL).then(() => {
     let map = new google.maps.Map(document.getElementById('map'), {
@@ -47,7 +48,7 @@ function loadMap(response){
   
     let overlay = new DeckOverlay({
       layers: [
-        new ColumnLayer({
+        new HexagonLayer({
           id: 'column-layer',
           data: responseParsed,
           filled: true,
@@ -67,7 +68,7 @@ function loadMap(response){
         html: 
           `<div style="display:grid; grid-template-columns: 100px 130px;>
               <div style="float:left;">
-                <img src='${object.picture}' style="width:90px; height:100px;">
+                <img src='${object.picture}' style="width:90px; height:100px; border-radius:5px">
               <div>
               <div>
                 <p>${object.location}</p>
@@ -107,7 +108,7 @@ function adjustFillColor(pricesqm, pricesqmArrayQuantiles){
 
 window.showOffers = function(inputId) {
   let city = String(document.getElementById(inputId).value);
-  fetch(`http://127.0.0.1:8000/api/?city=${city}`)
+  fetch(`http://estateprices.martyngodlewski.com/api/?city=${city}`)
     .then(async response => {
       let contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {

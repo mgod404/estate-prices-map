@@ -16,3 +16,5 @@ services:
       - ./webscraping-scripts/otodom:/app
     ports:
     - "8001:8001"
+    depends_on:
+      - web
