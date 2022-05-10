@@ -1,7 +1,8 @@
 ﻿import requests
 import concurrent.futures
+import os
 
-API_KEY = 'AIzaSyCHCXxiYJ-CjqHWR4MEZQplN_vwiuqPpfE'
+API_KEY = os.environ.get('GOOGLE_API')
 base_url = 'https://maps.googleapis.com/maps/api/geocode/json?'
 
 def geocode_single_location(location):
@@ -19,6 +20,7 @@ def geocode_single_location(location):
         return row
 
     if response['status'] == 'REQUEST_DENIED':
+        print(response)
         print("Request to Geocoding API is denied, issue with API key")
 
 

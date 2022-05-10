@@ -46,25 +46,23 @@ def queryset_to_list_of_dicts(queryset):
 def handle_get_request(request):
     request_data = request.GET
     city = remove_polish_lowercase_chars(str(request_data['city']).lower())
-    headers={'Access-Control-Allow-Origin': 'http://localhost:8080'}
 
     if 'city' not in request_data:
-        return HttpResponse(status=400, headers=headers)
+        return HttpResponse(status=400)
     
     if not LocationData.objects.filter(city=city).exists():
-        return HttpResponse('ERROR: Wrong city name or city not in database',status=400, headers=headers)
+        return HttpResponse('ERROR: Wrong city name or city not in database',status=400)
     response_offers = Offer.objects.select_related('location_data').filter(
         location_data__city=city,
         date_of_scraping=date.today()
         )
     response_offers_as_list_of_dicts = queryset_to_list_of_dicts(response_offers)
 
-    return JsonResponse(response_offers_as_list_of_dicts, safe=False, headers=headers)
+    return JsonResponse(response_offers_as_list_of_dicts, safe=False)
 
 
 def handle_post_request(request):
     request_data = ast.literal_eval(json.loads(request.body))
-    # print(f'Data from POST request :  {request_data}')
 
     if request_data['key'] != '1234':
         return HttpResponse(status=401)

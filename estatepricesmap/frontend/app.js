@@ -4,9 +4,9 @@ import {mean, quantileSeq, min, max} from 'mathjs';
 
 require('file-loader?name=[name].[ext]!./index.html');
 // Set your Google Maps API key here or via environment variable
-let GOOGLE_MAPS_API_KEY = "AIzaSyCHCXxiYJ-CjqHWR4MEZQplN_vwiuqPpfE"; // eslint-disable-line
-let GOOGLE_MAP_ID = 'f52ed2dd8b0fe113'; // eslint-disable-line
-let GOOGLE_MAPS_API_URL = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&v=beta&map_ids=${GOOGLE_MAP_ID}`;
+const GOOGLE_MAPS_API_KEY = "AIzaSyAKcerlw9vs-spzoGujzVmGNNDcNwMLGbs"; // eslint-disable-line
+const GOOGLE_MAP_ID = 'f52ed2dd8b0fe113'; // eslint-disable-line
+const GOOGLE_MAPS_API_URL = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&v=beta&map_ids=${GOOGLE_MAP_ID}`;
 
 
 function loadScript(url) {
@@ -107,7 +107,7 @@ function adjustFillColor(pricesqm, pricesqmArrayQuantiles){
 
 window.showOffers = function(inputId) {
   let city = String(document.getElementById(inputId).value);
-  fetch("http://127.0.0.1:8000/api/" + "?city=" + city)
+  fetch(`http://127.0.0.1:8000/api/?city=${city}`)
     .then(async response => {
       let contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {

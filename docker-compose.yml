@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  web:
+    build: ./estatepricesmap/
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./estatepricesmap:/app
+    ports:
+      - "8000:8000"
+
+  scraper:
+    build: ./webscraping-scripts/otodom/
+    command: python main.py
+    volumes:
+      - ./webscraping-scripts/otodom:/app
+    ports:
+    - "8001:8001"
