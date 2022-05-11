@@ -1,6 +1,5 @@
 import {GoogleMapsOverlay as DeckOverlay} from '@deck.gl/google-maps';
 import {ColumnLayer} from '@deck.gl/layers';
-import {HexagonLayer} from '@deck.gl/aggregation-layers';
 import {mean, quantileSeq, min, max} from 'mathjs';
 
 require('file-loader?name=[name].[ext]!./index.html');
@@ -48,7 +47,7 @@ function loadMap(response){
   
     let overlay = new DeckOverlay({
       layers: [
-        new HexagonLayer({
+        new ColumnLayer({
           id: 'column-layer',
           data: responseParsed,
           filled: true,

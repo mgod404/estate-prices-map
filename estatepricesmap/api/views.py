@@ -99,6 +99,8 @@ def handle_post_request(request):
         )
         new_offer.save()
         print('new offer saved')
+    
+    Offer.objects.exclude(date_of_scraping=date.today()).delete()
 
     return HttpResponse(status=200)  
 
