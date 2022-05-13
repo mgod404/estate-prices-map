@@ -107,7 +107,7 @@ function adjustFillColor(pricesqm, pricesqmArrayQuantiles){
 
 window.showOffers = function(inputId) {
   let city = String(document.getElementById(inputId).value);
-  fetch(`http://127.0.0.1:8000/api/?city=${city}`)
+  fetch(`http://estateprices.martyngodlewski.com/api/?city=${city}`)
     .then(async response => {
       let contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {

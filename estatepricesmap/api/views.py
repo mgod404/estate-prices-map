@@ -39,6 +39,14 @@ def queryset_to_list_of_dicts(queryset):
         queryset
         ))
 
+def remove_expensive_offers(list_of_dicts):
+    distinct_geodata = set((item['lat'],item['lng']) for item in list_of_dicts)
+    distinct_offers_lowest_price = []
+    for geodata in distinct_geodata:
+        same_geodata = [i for i in list_of_dicts if (i['lat'],i['lng']) == geodata]
+        same_geodata.sort(key=lambda d: d['pricesqm'])
+        distinct_offers_lowest_price.append(same_geodata[0])
+    return distinct_offers_lowest_price
 
 def handle_get_request(request):
     request_data = request.GET
@@ -53,10 +61,11 @@ def handle_get_request(request):
         location_data__city=city,
         date_of_scraping=date.today()
         )
-    print(len(response_offers))
+
+
     response_offers_as_list_of_dicts = queryset_to_list_of_dicts(response_offers)
-    print('hello')
-    return JsonResponse(response_offers_as_list_of_dicts, safe=False)
+    response_offers_distinct = remove_expensive_offers(response_offers_as_list_of_dicts)
+    return JsonResponse(response_offers_distinct, safe=False)
 
 
 def handle_post_request(request):

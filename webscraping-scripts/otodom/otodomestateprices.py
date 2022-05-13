@@ -16,7 +16,7 @@ def how_many_pages_to_scrape(URL):
     data = str(page.find('script', id="__NEXT_DATA__").contents[0])
     data_json = json.loads(data)
     page_count = data_json['props']['pageProps']['tracking']['listing']['page_count']
-
+    print(f'page count is {page_count}')
     return int(page_count)
 
 
@@ -69,7 +69,7 @@ def otodom_page_scraper(number_of_page_to_scrape, URL):
             'link': link, 
             'picture': picture
         })
-    # print(f'page {number_of_page_to_scrape} done')
+    print(f'page {number_of_page_to_scrape} done')
     return array_of_offers_scraped
 
 

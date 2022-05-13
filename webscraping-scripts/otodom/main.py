@@ -69,7 +69,9 @@ def get_city_geodata(city):
 def get_new_offers(cities):
     for city,url in cities.items():
         city_geodata = get_city_geodata(city);
+        print('got city_geodata')
         offers = otodom_web_scraper(url)
+        print('offers scraped')
         offers_geocoded = geocode_offers(offers, city_geodata)
         post_data(city, offers_geocoded)
 
@@ -77,8 +79,8 @@ def get_new_offers(cities):
 if __name__ == "__main__":
 
     CITIES_URL = {
-        # 'warszawa' : "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/warszawa?limit=100&page=",
-        # 'krakow' : "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/krakow?limit=100&page=",
+        'warszawa' : "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/warszawa?limit=400&page=",
+        'krakow' : "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/krakow?limit=100&page=",
         'wroclaw' : "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/wroclaw?limit=100&page="
     }
 
@@ -90,10 +92,8 @@ if __name__ == "__main__":
             sys.exit("Webscraper stopped functioning properly. Possible changes at the scraped site")
         get_new_offers(cities=CITIES_URL)
 
-    schedule.every().day.at("00:01").do(webscrape)
+    schedule.every().day.at("12:30").do(webscrape)
 
     while True:
         schedule.run_pending()
         time.sleep(1)
-
-
