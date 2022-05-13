@@ -8,3 +8,8 @@ services:
       - ./estatepricesmap:/app
     ports:
       - "8000:8000"
+  scraper:
+    build: ./webscraping-scripts/otodom/
+    command: python -u main.py
+    volumes:
+    - ./webscraping-scripts/otodom:/app

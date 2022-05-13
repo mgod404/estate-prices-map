@@ -1,11 +1,8 @@
-from django.shortcuts import render
+from decimal import Decimal
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.core import serializers
 from .models import Offer, LocationData
-from .googlemapsgeocoding import geocode_single_location
 from datetime import date
-import concurrent.futures 
 import json
 import ast
 
@@ -56,8 +53,9 @@ def handle_get_request(request):
         location_data__city=city,
         date_of_scraping=date.today()
         )
+    print(len(response_offers))
     response_offers_as_list_of_dicts = queryset_to_list_of_dicts(response_offers)
-
+    print('hello')
     return JsonResponse(response_offers_as_list_of_dicts, safe=False)
 
 
@@ -77,28 +75,35 @@ def handle_post_request(request):
 
         if LocationData.objects.filter(location=location).exists():
             geodata = LocationData.objects.get(location=location)
-            print('geodata used from database')
+            # print('geodata used from database')
         else:
-            geodata = geocode_single_location(location)
+            geodata = {
+                'lat': offer['lat'],
+                'lng': offer['lng']
+            }
             new_geodata = LocationData(
                 city= city, 
-                location = location, 
+                location = location,
                 latitude = geodata['lat'],
                 longtitude = geodata['lng']
                 )
-            new_geodata.save()
+            try:
+                new_geodata.save()
+            except:
+                print(new_geodata)
             print('new geodata created')
 
         new_offer = Offer(
             location_data = LocationData.objects.get(location=location), 
-            pricesqm = offer['pricesqm'], 
-            price = offer['price'], 
-            size = offer['size'], 
+            pricesqm = Decimal(offer['pricesqm']), 
+            price = Decimal(offer['price']), 
+            size = Decimal(offer['size']), 
             link = offer['link'], 
             picture = offer['picture'],
         )
+        print(f"{offer['price']} , {offer['size'], offer['pricesqm']}")
         new_offer.save()
-        print('new offer saved')
+        # print('new offer saved')
     
     Offer.objects.exclude(date_of_scraping=date.today()).delete()
 
@@ -115,3 +120,29 @@ def index(request):
 
     else:
         return HttpResponse(status=418)
+
+
+def queryset_to_list_of_dicts_geodata(queryset):
+    return list(map(lambda q: {
+            'city': q.city,
+            'location': q.location,
+            'latitude': q.latitude,
+            'longtitude': q.longtitude
+        },
+        queryset
+        ))
+
+@csrf_exempt
+def geo_data(request):
+    if request.method == 'GET':
+        request_data = request.GET
+        if 'city' not in request_data:
+            return HttpResponse(status=400)
+        city = remove_polish_lowercase_chars(str(request_data['city']).lower())
+        geo_data = LocationData.objects.filter(city=city)
+        geo_data_serialized = queryset_to_list_of_dicts_geodata(geo_data)
+        return JsonResponse(geo_data_serialized, safe=False)
+
+
+
+

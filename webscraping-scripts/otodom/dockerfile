@@ -12,4 +12,4 @@ ENV PORT=8001
 
 EXPOSE 8001
 
-CMD ["python", "-u" ,"./main.py"]
+CMD ["python", "-u" ,"main.py"]
